@@ -25,18 +25,18 @@ jobs:
 
       - name: Build and push x86-64 image
         run: |
-          docker build . --file Dockerfile --tag ${IMAGE_NAME,,}-x86_64 --label "runnumber=${GITHUB_RUN_ID}"
+          docker build . --file Dockerfile --tag $IMAGE_NAME-x86-64 --label "runnumber=${GITHUB_RUN_ID}"
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
-          docker push ghcr.io/${{ github.repository_owner }}/${IMAGE_NAME,,}-x86_64:latest
+          docker push ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME-x86-64:latest
 
       - name: Build and push ARM64 image
         run: |
-          docker build . --file Dockerfile --tag ${IMAGE_NAME,,}-arm64 --label "runnumber=${GITHUB_RUN_ID}" --build-arg ARCH=arm64
+          docker build . --file Dockerfile --tag $IMAGE_NAME-arm64 --label "runnumber=${GITHUB_RUN_ID}" --build-arg ARCH=arm64
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
-          docker push ghcr.io/${{ github.repository_owner }}/${IMAGE_NAME,,}-arm64:latest
+          docker push ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME-arm64:latest
 
       - name: Create manifest list
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
-          docker manifest create ghcr.io/${{ github.repository_owner }}/${IMAGE_NAME,,}:latest ghcr.io/${{ github.repository_owner }}/${IMAGE_NAME,,}-x86_64:latest ghcr.io/${{ github.repository_owner }}/${IMAGE_NAME,,}-arm64:latest
-          docker manifest push --purge ghcr.io/${{ github.repository_owner }}/${IMAGE_NAME,,}:latest
+          docker manifest create ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME:latest ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME-x86-64:latest ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME-arm64:latest
+          docker manifest push --purge ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME:latest
