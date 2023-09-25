@@ -5,16 +5,9 @@ on:
   push:
     branches:
       - main
-  pull_request:
-  # This creates an environment variable called `IMAGE_NAME ` with the value `ghtoken_product_demo`.
 env:
   IMAGE_NAME: marvin2
-
-  # https://github.com/docker/build-push-action/issues/621
-  # CARGO_NET_GIT_FETCH_WITH_CLI: true
-#
 jobs:
-  # This pushes the image to GitHub Packages.
   push:
     runs-on: ubuntu-latest
     steps:
