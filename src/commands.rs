@@ -33,10 +33,13 @@ pub async fn verify(
     };
 
     if is_member {
+        println!("Found member {student_id} in cache");
         add_role(ctx).await?;
 
         return Ok(());
     }
+
+    println!("Refreshing cache to look for {student_id}");
 
     ctx.defer_ephemeral().await?;
 
@@ -55,10 +58,13 @@ pub async fn verify(
     *ctx.data().members.lock().unwrap() = new_student_list;
 
     if is_now_in_members {
+        println!("Found member {student_id} in new member list");
         add_role(ctx).await?;
 
         return Ok(());
     }
+
+    println!("Failed to find {student_id} :(");
 
     ctx.say("Not found :(").await?;
 
