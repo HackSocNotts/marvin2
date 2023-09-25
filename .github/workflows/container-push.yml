@@ -17,42 +17,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up QEMU
+      -
+        name: Set up QEMU
         uses: docker/setup-qemu-action@v3
-      # - name: Set up Docker Buildx
-      #   uses: docker/setup-buildx-action@v3
-
-      # - name: Build image
-      #   run: docker build . --file Dockerfile --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
-
-      - name: Build and push image
-        uses: mr-smithers-excellent/docker-build-push@v6
-        with:
-          image: marvin2
-          registry: ghcr.io
-          multiPlatform: true
-          platform: linux/amd64,linux/arm64
-          username: ${{ secrets.GHCR_USERNAME }}
-          password: ${{ secrets.GHCR_TOKEN }}
-
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        
+      - name: Log in to registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
       
-
-      # - name: Log in to registry
-      #   run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
-      #   #
-      # - name: Push image
-      #   run: |
-      #     IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
-
-      #     # This changes all uppercase characters to lowercase.
-      #     IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-      #     # This strips the git ref prefix from the version.
-      #     VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
-      #     # This strips the "v" prefix from the tag name.
-      #     [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
-      #     # This uses the Docker `latest` tag convention.
-      #     [ "$VERSION" == "main" ] && VERSION=latest
-      #     echo IMAGE_ID=$IMAGE_ID
-      #     echo VERSION=$VERSION
-      #     docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
-      #     docker push $IMAGE_ID:$VERSION
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: hacksocnotts/marvin2:latest
