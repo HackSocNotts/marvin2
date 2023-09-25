@@ -25,18 +25,30 @@ jobs:
 
       - name: Build and push x86-64 image
         run: |
+          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
+          # This changes all uppercase characters to lowercase.
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+
           docker build . --file Dockerfile --tag $IMAGE_NAME-x86-64 --label "runnumber=${GITHUB_RUN_ID}"
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
-          docker push ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME-x86-64:latest
+          docker push $IMAGE_ID-x86-64:latest
 
       - name: Build and push ARM64 image
         run: |
+          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
+          # This changes all uppercase characters to lowercase.
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+
           docker build . --file Dockerfile --tag $IMAGE_NAME-arm64 --label "runnumber=${GITHUB_RUN_ID}" --build-arg ARCH=arm64
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
-          docker push ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME-arm64:latest
+          docker push $IMAGE_ID-arm64:latest
 
       - name: Create manifest list
         run: |
+          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
+          # This changes all uppercase characters to lowercase.
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
-          docker manifest create ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME:latest ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME-x86-64:latest ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME-arm64:latest
-          docker manifest push --purge ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME:latest
+          docker manifest create $IMAGE_ID:latest $IMAGE_ID-x86-64:latest $IMAGE_ID-arm64:latest
+          docker manifest push --purge $IMAGE_ID:latest
