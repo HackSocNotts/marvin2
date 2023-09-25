@@ -14,9 +14,6 @@ jobs:
   # This pushes the image to GitHub Packages.
   push:
     runs-on: ubuntu-latest
-    permissions:
-      packages: write
-      contents: read
     steps:
       - uses: actions/checkout@v4
 
