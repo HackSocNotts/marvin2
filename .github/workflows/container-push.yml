@@ -22,9 +22,6 @@ jobs:
         
       - name: Log in to registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
-
-      - name: Setup Cargo Vendor
-        run: cargo vendor
       
       - name: Build and push
         uses: docker/build-push-action@v5
