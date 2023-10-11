@@ -52,9 +52,9 @@ FROM debian:bullseye-slim AS final
 RUN apt update && apt install -y ca-certificates
 
 # Clean up apt stuff
-apt clean
-apt autoremove --yes
-rm -rf /var/lib/{apt,dpkg,cache,log}/
+RUN apt clean
+RUN apt autoremove --yes
+RUN rm -rf /var/lib/{apt,dpkg,cache,log}/
 
 # Create a non-privileged user that the app will run under.
 # See https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#user
