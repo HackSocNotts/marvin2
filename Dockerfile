@@ -48,6 +48,14 @@ EOF
 # (e.g., debian@sha256:ac707220fbd7b67fc19b112cee8170b41a9e97f703f588b2cdbbcdcecdd8af57).
 FROM debian:bullseye-slim AS final
 
+# Marvin2 needs CA certificates
+RUN apt update && apt install -y ca-certificates
+
+# Clean up apt stuff
+apt clean
+apt autoremove --yes
+rm -rf /var/lib/{apt,dpkg,cache,log}/
+
 # Create a non-privileged user that the app will run under.
 # See https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#user
 ARG UID=10001
