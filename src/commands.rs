@@ -66,7 +66,10 @@ pub async fn verify(
 
     println!("Failed to find {student_id} :(");
 
-    ctx.say("Not found :(").await?;
+    ctx.say(
+        "Couldn't find your membership. Please sign up at https://hacksoc.net/join and try again.",
+    )
+    .await?;
 
     Ok(())
 }
