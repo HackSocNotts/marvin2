@@ -33,6 +33,7 @@ async fn main() {
                         .expect("Missing WEBDRIVER_ADDRESS"),
                     sums_username: env::var("SUMS_USERNAME").expect("Missing SUMS_USERNAME"),
                     sums_password: env::var("SUMS_PASSWORD").expect("Missing SUMS_PASSWORD"),
+                    browser_name: env::var("BROWSER_NAME").expect("Missing BROWSER_NAME"),
                 })
             })
         });

@@ -718,8 +718,8 @@ checksum = "a08173bc88b7955d1b3145aa561539096c421ac8debde8cbc3612ec635fee29b"
 
 [[package]]
 name = "libsums"
-version = "0.3.0"
-source = "git+https://github.com/HackSocNotts/libsums.git#eb6364d646c50c4585d6023974ead5bfac4f3129"
+version = "1.0.0"
+source = "git+https://github.com/HackSocNotts/libsums.git#c3484eed5c58e8dff95cde99c52dbc2d298d1e1b"
 dependencies = [
  "chrono",
  "fantoccini",

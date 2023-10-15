@@ -13,6 +13,7 @@ pub struct Data {
     pub webdriver_address: String,
     pub sums_username: String,
     pub sums_password: String,
+    pub browser_name: String,
 }
 
 type Error = Box<dyn std::error::Error + Send + Sync>;
@@ -43,7 +44,12 @@ pub async fn verify(
 
     ctx.defer_ephemeral().await?;
 
-    let client = SumsClient::new(ctx.data().group_id, &ctx.data().webdriver_address).await?;
+    let client = SumsClient::new(
+        ctx.data().group_id,
+        &ctx.data().webdriver_address,
+        &ctx.data().browser_name,
+    )
+    .await?;
 
     client
         .authenticate(&ctx.data().sums_username, &ctx.data().sums_password)
