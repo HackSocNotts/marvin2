@@ -15,7 +15,7 @@ ARG APP_NAME
 WORKDIR /app
 
 RUN apt update
-RUN apt install -y libssl-dev pkg-config
+RUN apt install -y libssl-dev pkg-config git
 
 # Build the application.
 # Leverage a cache mount to /usr/local/cargo/registry/
