@@ -31,7 +31,7 @@ RUN --mount=type=bind,source=src,target=src \
     # --mount=type=cache,target=/usr/local/cargo/registry/ \
     <<EOF
 set -e
-cargo build --locked --release
+cargo build --locked --release --config net.git-fetch-with-cli=true
 cp ./target/release/$APP_NAME /bin/marvin2
 EOF
 
