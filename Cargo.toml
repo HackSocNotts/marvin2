@@ -6,6 +6,6 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-libsums = { git = "https://github.com/HackSocNotts/libsums.git", version = "0.4.0" }
+libsums = { git = "https://github.com/HackSocNotts/libsums.git", version = "0.5.0" }
 poise = "0.5.6"
 tokio = { version = "1.21.2", features = ["macros", "rt-multi-thread"] }
