@@ -26,13 +26,12 @@ pub async fn verify(
 ) -> Result<(), Error> {
     // We do these awkward scoped accesses to members because Rust doesn't like
     // holding mutexes past async calls
-    // let is_member = {
-    //     let members = ctx.data().members.lock().unwrap();
-    //     members
-    //         .iter()
-    //         .any(|student| student.student_id == student_id)
-    // };
-    let is_member = true;
+    let is_member = {
+        let members = ctx.data().members.lock().unwrap();
+        members
+            .iter()
+            .any(|student| student.student_id == student_id)
+    };
 
     if is_member {
         println!("Found member {student_id} in cache");
@@ -82,8 +81,7 @@ pub async fn verify(
 }
 
 async fn add_role(ctx: Context<'_>) -> Result<(), Error> {
-    ctx.say("The SU broke the bot so I'm assuming you're a HackSoc member (if you're not, please join anyway at https://hacksoc.net/join 🥺). Welcome to HackSoc :)")
-        .await?;
+    ctx.say("Verified! Welcome to HackSoc :)").await?;
 
     if let Some(mut author) = ctx.author_member().await {
         author
