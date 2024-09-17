@@ -4,6 +4,7 @@ use libsums::{
     client::SumsClient,
     member::{Member, StudentId},
 };
+use log::info;
 use poise::serenity_prelude::RoleId;
 
 pub struct Data {
@@ -24,6 +25,11 @@ pub async fn verify(
     ctx: Context<'_>,
     #[description = "Your Student ID"] student_id: StudentId,
 ) -> Result<(), Error> {
+    info!(
+        "Verify invoked by {}. student_id: {student_id}",
+        ctx.author().name
+    );
+
     // We do these awkward scoped accesses to members because Rust doesn't like
     // holding mutexes past async calls
     let is_member = {
@@ -34,13 +40,13 @@ pub async fn verify(
     };
 
     if is_member {
-        println!("Found member {student_id} in cache");
+        info!("Found member {student_id} in cache");
         add_role(ctx).await?;
 
         return Ok(());
     }
 
-    println!("Refreshing cache to look for {student_id}");
+    info!("Refreshing cache to look for {student_id}");
 
     ctx.defer_ephemeral().await?;
 
@@ -64,13 +70,16 @@ pub async fn verify(
     *ctx.data().members.lock().unwrap() = new_student_list;
 
     if is_now_in_members {
-        println!("Found member {student_id} in new member list");
+        info!("Found member {student_id} in new member list");
         add_role(ctx).await?;
 
         return Ok(());
     }
 
-    println!("Failed to find {student_id} :(");
+    info!(
+        "Failed to find {student_id} - not authorising {}",
+        ctx.author().name
+    );
 
     ctx.say(
         "Couldn't find your membership. Please sign up at https://hacksoc.net/join and try again.",
@@ -84,10 +93,11 @@ async fn add_role(ctx: Context<'_>) -> Result<(), Error> {
     ctx.say("Verified! Welcome to HackSoc :)").await?;
 
     if let Some(mut author) = ctx.author_member().await {
-        author
-            .to_mut()
-            .add_role(ctx.http(), ctx.data().role_id)
-            .await?;
+        let role_id = ctx.data().role_id;
+
+        info!("Adding role {role_id} to {}", ctx.author().name);
+
+        author.to_mut().add_role(ctx.http(), role_id).await?;
     }
 
     Ok(())

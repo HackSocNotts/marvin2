@@ -3,10 +3,15 @@ mod commands;
 use std::{env, sync::Mutex};
 
 use commands::{verify, Data};
+use log::info;
 use poise::serenity_prelude::{GatewayIntents, RoleId};
 
 #[tokio::main]
 async fn main() {
+    env_logger::init();
+
+    info!("Starting marvin2");
+
     let framework = poise::Framework::builder()
         .options(poise::FrameworkOptions {
             commands: vec![verify()],
