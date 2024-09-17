@@ -3,12 +3,13 @@ mod commands;
 use std::{env, sync::Mutex};
 
 use commands::{verify, Data};
+use env_logger::Env;
 use log::info;
 use poise::serenity_prelude::{GatewayIntents, RoleId};
 
 #[tokio::main]
 async fn main() {
-    env_logger::init();
+    env_logger::Builder::from_env(Env::default().default_filter_or("info")).init();
 
     info!("Starting marvin2");
 
