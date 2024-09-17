@@ -7,7 +7,7 @@
 ################################################################################
 # Create a stage for building the application.
 
-ARG RUST_VERSION=1.67.1
+ARG RUST_VERSION=1.78.0
 ARG APP_NAME=marvin2
 ARG CARGO_NET_GIT_FETCH_WITH_CLI=true
 FROM rust:${RUST_VERSION}-slim-bullseye AS build
